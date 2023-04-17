@@ -1,0 +1,43 @@
+buildscript {
+    ext.kotlin_version = '1.7.10'
+    ext.compileSdkVersion = 31
+    ext.targetSdkVersion = 31
+    ext.appCompatVersion = '1.4.2'
+    ext.playServicesLocationVersion = '20.0.0'
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven{
+            url "${project(':flutter_background_geolocation').projectDir}/libs"
+        }
+        maven{
+            // [required] background_fetch
+            url "${project(':background_fetch').projectDir}/libs"
+        }
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
